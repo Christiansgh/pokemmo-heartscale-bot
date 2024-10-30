@@ -13,6 +13,7 @@ def start_main_loop():
 def activate_helpers(target, certainty):
     state.state["target"] = target
     state.state["certainty"] = certainty
+    utils.print_info("Activating helpers...")
     state.events["activate"].set()
 
 def handle_current_task():
@@ -36,7 +37,6 @@ def handle_next_task():
 def handle_heal():
     movement.teleport()
     time.sleep(3)
-    
     activate_helpers("screenshots/heal_ready.png", 0.8)
     state.state["await"] = True
     while state.state["await"]:

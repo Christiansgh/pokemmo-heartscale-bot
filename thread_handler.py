@@ -15,7 +15,7 @@ def init_threads():
     t.start()
 
 def init_keybinds_listener():
-    print("keybinds_reader_service started")
+    utils.print_info("Kebinds listener started")
     while not state.state["quit"]:
         if keyboard.is_pressed('alt+q'):
             print("Keybinds listener stopped.")
@@ -35,4 +35,3 @@ def init_screen_reader_service(num_threads):
     for _ in range(num_threads):
         t = threading.Thread(target=screenreader.handle_activation)
         t.start()
-    print("screen_reader_service started")

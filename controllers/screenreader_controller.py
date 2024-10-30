@@ -56,16 +56,18 @@ def find_best_candidate(candidates_list):
     print(f"TODO: {candidates_list}")
 
 def handle_activation():
-    utils.print_info("Screenreader waiting...")
-    state.events["activate"].wait()
-    utils.print_info("Screenreader activated...")
-    target = state.state["target"]
-    certainty = state.state["certainty"]
+    while not state.state["quit"]:
+        utils.print_info("Screenreader waiting...")
+        state.events["activate"].wait()
+        utils.print_info("Screenreader activated...")
+        target = state.state["target"]
+        certainty = state.state["certainty"]
 
-    while True: # Loop, permanently untill we return
-        result = find_candidate(certainty, target, 69)
-        if result[0] >= certainty:
-            state.state["await"] = False
-            state.events["activate"].clear()
-            break
-        continue
+        while True: # Loop, permanently untill we return
+            result = find_candidate(certainty, target, 69)
+            utils.print_red(f"Result: {result}")
+            if result[0] >= certainty:
+                state.state["await"] = False
+                state.events["activate"].clear()
+                break;
+            continue

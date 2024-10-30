@@ -3,7 +3,7 @@ import threading
 state = {
     "current_task": "idle",
     "next_task": "not_none",#"none",
-    "await": True, # For main thread
+    "await": False, # For main thread
     "quit": False,
     "num_timeouts": 0,
     "payday": 32,
