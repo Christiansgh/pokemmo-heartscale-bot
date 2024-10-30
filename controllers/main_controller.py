@@ -19,8 +19,16 @@ def activate_helpers(target, certainty):
 def handle_current_task():
     if state.state["payday"] == 0 or state.state["thief"] == 0:
         handle_heal()
+
+    current_task = state.state["current_task"]
+    if current_task == "idle":
+        return
+
+    if current_task == "walk_back":
         handle_walk_back()
 
+    if current_task == "fish":
+        utils.print_red("FISHING FISHING FISHING")
     # if state.state["current_task"] == "fishing":
     #     print("TODO: handle_current_task(battling)")
     #
@@ -35,6 +43,7 @@ def handle_next_task():
         state.state["current_task"] = state.state["next_task"]
 
 def handle_heal():
+    state.state["next_task"] = "walk_back"
     movement.teleport()
     time.sleep(3)
     activate_helpers("screenshots/heal_ready.png", 0.8)
@@ -47,11 +56,15 @@ def handle_heal():
     utils.print_command("Healing")
     movement.press_and_hold('space', 2)
     movement.run_for(2.5, 's')
+    state.state["payday"] = 32
+    state.state["thief"] = 40
+    state.state["current_task"] = "idle"
 
 def handle_walk_back():
+    state.state["next_task"] = "fish"
     movement.run_for(2, 'a')
     movement.run_for(2, 's')
-    state.state["payday"] = 32
+    state.state["current_task"] = "idle"
 
 #TODO:
 def handle_battle():

@@ -65,7 +65,6 @@ def handle_activation():
 
         while True: # Loop, permanently untill we return
             result = find_candidate(certainty, target, 69)
-            utils.print_red(f"Result: {result}")
             if result[0] >= certainty:
                 state.state["await"] = False
                 state.events["activate"].clear()
