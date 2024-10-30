@@ -4,6 +4,7 @@ import shared_state as state
 import controllers.main_controller as main
 import controllers.screenreader_controller as screenreader
 import utils
+import time
 
 
 def init_threads():
@@ -22,13 +23,13 @@ def init_keybinds_listener():
             state.state["quit"] = True
         if keyboard.is_pressed('alt+r'):
             state.events["heal_ready"].set()
-            # kill all threads besides main and keybind listener.
+            # kill all threads besides main and keybind listener
             # reset the threads.
             # send heal command.
         if keyboard.is_pressed("F12"):
+            state.state["payday"] = 0
             print("F12 detected")
-            state.state["current_task"] = "waiting..." 
-            main.handle_heal() 
+            time.sleep(1)
 
 def init_screen_reader_service(num_threads):
     for _ in range(num_threads):

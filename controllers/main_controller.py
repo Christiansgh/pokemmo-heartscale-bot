@@ -18,13 +18,13 @@ def activate_helpers(target, certainty):
 def handle_current_task():
     if state.state["payday"] == 0 or state.state["thief"] == 0:
         handle_heal()
+        handle_walk_back()
 
-
-    if state.state["current_task"] == "fishing":
-        print("TODO: handle_current_task(battling)")
-        
-    elif state.state["current_task"] == "battling":
-        print("TODO: handle_current_task(battling)")
+    # if state.state["current_task"] == "fishing":
+    #     print("TODO: handle_current_task(battling)")
+    #
+    # elif state.state["current_task"] == "battling":
+    #     print("TODO: handle_current_task(battling)")
 
 def handle_next_task():
     if state.state["next_task"] == "none":
@@ -48,6 +48,11 @@ def handle_heal():
     movement.press_and_hold('space', 2)
     movement.run_for(2.5, 's')
 
+def handle_walk_back():
+    movement.run_for(2, 'a')
+    movement.run_for(2, 's')
+    state.state["payday"] = 32
+
 #TODO:
 def handle_battle():
     print("TODO: main_controller.handle_battle()")
@@ -55,10 +60,6 @@ def handle_battle():
 #TODO:
 def handle_fish():
     print("TODO: main_controller.handle_fish()")
-
-#TODO:
-def handle_walk_back():
-    print("TODO: main_controller.handle_walk_back()")
 
 #TODO:
 def handle_stuck():
