@@ -2,22 +2,33 @@ import threading
 
 state = {
     "current_task": "idle",
-    "next_task": "none",
-    "await": True,
+    "next_task": "not_none",#"none",
+    "await": True, # For main thread
     "quit": False,
-    "num_timeouts": 0
+    "num_timeouts": 0,
+    "payday": 32,
+    "thief": 40,
+    "target": "none",
+    "found": False,
+    "certainty": 0,
 }
 
-state_lock = threading.Lock()
+lock = threading.Lock()
+
+events = {
+    "heal_ready": threading.Event(),
+    "activate": threading.Event(), # for helper threads
+}
 
 def push_state(state):
-    with state_lock:
+    with lock:
         if state["next_task"] == "idle":
             state["current_task"] = f"{state}"
     
 def pop_state():
-    state["current_task"] = state["next_task"]
-    state["next_task"] = "none"
+    with lock:
+        state["current_task"] = state["next_task"]
+        state["next_task"] = "none"
 
     
 

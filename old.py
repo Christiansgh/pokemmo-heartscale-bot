@@ -188,7 +188,6 @@ def find_candidate(certainty, candidate_path):
 
 
 def reset():
-    print_command("Teleporting")
     press_key('b')
     time.sleep(4)
 

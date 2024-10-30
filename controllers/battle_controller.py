@@ -1,4 +1,5 @@
 import pyautogui
+import utils
 
 def send_move_one():
     send_move(['space', 'space'])
@@ -20,7 +21,7 @@ def send_move(moves):
     pyautogui.press('a')
     pyautogui.press('w')
     for entry in moves:
-        print(f"SENDING KEY: {entry}")
+        utils.print_command(f"SENDING KEY: {entry}")
         pyautogui.press(entry)
 
 #TODO:

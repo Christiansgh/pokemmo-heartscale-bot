@@ -10,72 +10,61 @@ def start_main_loop():
         handle_current_task()
         handle_next_task()
 
-def await_event(event):
-    if event == "fish_caught":
-        # Wait for text bubble.
-        print("TODO:")
-    if event == "heal_ready":
-        # Wait till outside pokemon center.
-        print("TODO:")
-        print("Making threads look for heal popup.")
-    if event == "done_walking":
-        # Wait till at fishing spot.
-        print("TODO:")
-
-    # awaits untill the next state is ready.
-    # Fishing, healing, move etc.
+def activate_helpers(target, certainty):
+    state.state["target"] = target
+    state.state["certainty"] = certainty
+    state.events["activate"].set()
 
 def handle_current_task():
-    if state.state["current_task"] == "idle":
-        utils.print_info("Current task: Idle...")
-        return
     if state.state["payday"] == 0 or state.state["thief"] == 0:
         handle_heal()
-        handle_walk_back()
-        await_event("done_walking")
+
 
     if state.state["current_task"] == "fishing":
-        await_event("fish_caught")
-
+        print("TODO: handle_current_task(battling)")
+        
     elif state.state["current_task"] == "battling":
-        print("TODO:")   
+        print("TODO: handle_current_task(battling)")
 
 def handle_next_task():
     if state.state["next_task"] == "none":
-        print("TODO:")
+        print("TODO: handle_next_task()")
         #state.state["current_task"] = "idle"
     else:
         state.state["current_task"] = state.state["next_task"]
 
 def handle_heal():
-    utils.print_command("Teleporting")
     movement.teleport()
     time.sleep(3)
-# loop back if assertion fails
-    movement.press_and_hold('space', 0.2)
-    await_event("heal_ready")
-# assert has heal ready. // Find candidate
+    
+    activate_helpers("screenshots/heal_ready.png", 0.8)
+    state.state["await"] = True
+    while state.state["await"]:
+        movement.press_and_hold('space', 0.2)
+        utils.print_red("Waiting for heal ready...")
+        time.sleep(0.3)
+
     utils.print_command("Healing")
-    movement.press_and_hold('space', 4)
-    movement.run_for(2, 's')
+    movement.press_and_hold('space', 2)
+    movement.run_for(2.5, 's')
 
 #TODO:
 def handle_battle():
-    print("TODO:")
+    print("TODO: main_controller.handle_battle()")
 
 #TODO:
 def handle_fish():
-    print("TODO:")
+    print("TODO: main_controller.handle_fish()")
 
 #TODO:
 def handle_walk_back():
-    print("TODO:")
+    print("TODO: main_controller.handle_walk_back()")
 
 #TODO:
 def handle_stuck():
-    print("TODO:")
+    print("TODO: main_controller.handle_stuck()")
 
 #TODO:
 def handle_too_many_timeouts():
-    print("TODO:")
+    print("TODO: main_controller.handle_too_many_timeouts()")
 

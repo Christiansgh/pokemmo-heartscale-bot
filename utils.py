@@ -13,7 +13,7 @@ def print_delimiter():
     print(f"{WHITE}================================================================={RESET}")
 
 def print_info(message):
-    print(f"{BLUE}INFO: {message}{RESET}")
+    print(f"{BLUE}INFO: {RESET}{message}")
 
 def print_command(message):
     print(f"{MAGENTA}COMMAND: {RESET}{message}")
