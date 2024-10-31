@@ -18,14 +18,17 @@ def activate_helpers(target, certainty, max_timeouts = 0):
     state.state["max_timeouts"] = max_timeouts
     state.state["target"] = target
     state.state["certainty"] = certainty
-    utils.print_info("Activating helpers...")
     state.events["activate"].set()
 
 def handle_current_task():
     if state.state["current_task"] is not "idle":
+        utils.print_delimiter()
         utils.print_green(f"Current task: {state.state['current_task']}")
 
     if state.state["payday"] == 0 or state.state["thief"] == 0:
+        time.sleep(1)
+        battle.run()
+        time.sleep(1)
         handle_heal()
 
     current_task = state.state["current_task"]
@@ -136,14 +139,15 @@ def handle_battle():
 
     # TODO: IT IS POSSIBLE THAT CHANGING THE THEME FOR BETTER CONTRAST MIGHT BE A BETTER SOLUTION
 
-    activate_helpers("screenshots/dead.png", 0.97, 50)
+    utils.print_info("Waiting for battle to finish...")
+    activate_helpers("screenshots/dead.png", 0.97, 25)
     state.events["continue"].clear()
     state.events["continue"].wait()
     found = state.state["found"]
 
     if found:
         state.state["next_task"] = "fish"
-        time.sleep(5)
+        time.sleep(4.5)
         remove_held_item()
     else:
         state.state["next_task"] = "battle"
@@ -217,12 +221,6 @@ def remove_held_item():
 # Screen dimensions for reference
         screen_width, screen_height = pyautogui.size()  # Total virtual screen dimensions
 
-# Rectangle drawing (for visual debugging)
-        # img = cv2.imread("screenshots/69.png")
-        # res = cv2.rectangle(img, (loc[0] + width - 40, loc[1] + height - 40), (loc[0] + width - 10, loc[1] + height - 10), (0, 255, 0), 2)
-        # cv2.imshow("Image", res)
-        # cv2.waitKey(0)
-
 # Adjust x-coordinate by screen width to target second monitor
         offset_x = 1920 if screen_width > 1920 else 0  # Adjust this if your primary screen width varies
         random_x = random.randint(int(loc[0] + width - 40), int(loc[0] + width - 10)) + offset_x
@@ -237,6 +235,7 @@ def remove_held_item():
     #   With click and hold, and move to Y 0 and 10000 X.
         pyautogui.FAILSAFE = False
         pyautogui.dragTo(10000, 0, 0.2, button='left')
+        remove_held_item() # Rerun to remove the item, now that the interface is opened correctly.
 
 def locate_image():
     #img = cv2.imread("screenshots/69.png")

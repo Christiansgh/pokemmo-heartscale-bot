@@ -13,7 +13,6 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
 
     while retry_count < max_retries:
         with mss.mss() as sct:
-            utils.print_info("Screnshotting game...")
             img = sct.grab(sct.monitors[monitor_num])
             mss.tools.to_png(img.rgb, img.size, output=f"screenshots/{thread_num}.png")
 
@@ -47,8 +46,6 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
     if max_result >= certainty:
         utils.print_green(f"{candidate_path} found - result: {max_result:.2f} required: {certainty}")
         state.state["found"] = True
-        print("RETURNING TRUE")
-        print("STATE.STATE[FOUND]: ", state.state["found"])
         return True, max_result, max_loc, candidate.shape[1], candidate.shape[0] #TODO: Set state here rather than return
 
     utils.print_red(f"{candidate_path} not found - result: {max_result:.2f} required: {certainty}")
@@ -57,10 +54,8 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
 
 def handle_activation():
     while not state.state["quit"]:
-        utils.print_info("Screenreader waiting...")
         state.events["activate"].wait()
         state.state["found"] = False
-        utils.print_info("Screenreader activated...")
         target = state.state["target"]
         certainty = state.state["certainty"]
 

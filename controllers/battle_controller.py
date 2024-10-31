@@ -1,5 +1,6 @@
 import pyautogui
 import utils
+import time
 import shared_state as state
 
 def send_move_one():
@@ -39,10 +40,13 @@ def send_move(moves):
         pyautogui.press(entry)
 
 def run():
+    utils.print_command("RUNNING")
     pyautogui.press('shift')
     pyautogui.press('s')
     pyautogui.press('d')
     pyautogui.press('space')
+    time.sleep(1)
+    pyautogui.press('shift')
 
 #TODO:
 def swap_pokemon(path_to_swap):
