@@ -28,12 +28,12 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
     
     if game_screenshot is None:
         print("Error: Failed to load screenshot after retries.")
-        return False, None, None, None, 0
+        return False, 0, None, None, None
 
     candidate = cv2.imread(candidate_path, cv2.IMREAD_GRAYSCALE)
     if candidate is None:
         print(f"Error: Could not load {candidate_path}.")
-        return False, None, None, None, 0
+        return False, 0, None, None, None
 
     # Apply a binary threshold to highlight the white areas
     _, game_screenshot_thresh = cv2.threshold(game_screenshot, 240, 255, cv2.THRESH_BINARY)
@@ -46,27 +46,44 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
     # Check if the result is above the certainty threshold
     if max_result >= certainty:
         utils.print_green(f"{candidate_path} found - result: {max_result:.2f} required: {certainty}")
-        return True, max_loc, candidate.shape[1], candidate.shape[0], max_result
+        state.state["found"] = True
+        print("RETURNING TRUE")
+        print("STATE.STATE[FOUND]: ", state.state["found"])
+        return True, max_result, max_loc, candidate.shape[1], candidate.shape[0] #TODO: Set state here rather than return
 
     utils.print_red(f"{candidate_path} not found - result: {max_result:.2f} required: {certainty}")
-    return False, None, None, None, max_result
-
-#TODO:
-def find_best_candidate(candidates_list):
-    print(f"TODO: {candidates_list}")
+    state.state["found"] = False
+    return False, max_result, None, None, None #TODO: Set state here rather than return
 
 def handle_activation():
     while not state.state["quit"]:
         utils.print_info("Screenreader waiting...")
         state.events["activate"].wait()
+        state.state["found"] = False
         utils.print_info("Screenreader activated...")
         target = state.state["target"]
         certainty = state.state["certainty"]
 
-        while True: # Loop, permanently untill we return
+        max_timeouts = state.state["max_timeouts"]
+        num_timeouts = 0
+
+        while num_timeouts < max_timeouts:
             result = find_candidate(certainty, target, 69)
+            state.state["result"] = result[1]
             if result[0] >= certainty:
                 state.state["await"] = False
-                state.events["activate"].clear()
+                state.events["continue"].set()
+                state.events["activate"].clear() #TODO: State should be set in "find_candidate()" instead.
+                state.state["found"] = True
+                state.state["loc"] = result[2]
+                state.state["width"] = result[3]
+                state.state["height"] = result[4]
                 break;
+            num_timeouts += 1
             continue
+
+        if num_timeouts >= max_timeouts:
+            utils.print_red("ERROR: MAX TIMEOUTS REACHED")
+        state.state["await"] = False
+        state.events["continue"].set()
+        state.events["activate"].clear()

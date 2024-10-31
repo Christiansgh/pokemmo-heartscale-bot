@@ -1,17 +1,30 @@
 import pyautogui
 import utils
+import shared_state as state
 
 def send_move_one():
-    send_move(['space', 'space'])
+    if state.state["thief"] == 0:
+        utils.print_red("ERROR: IN BATTLE TRYING TO SEND MOVE WITH 0 PP LEFT")
+        run()
+        return
+    send_move(['space'])
+    state.state['thief'] -= 1
+    utils.print_command(f"Thiefs left: {state.state['thief']}")
 
 def send_move_two():
-    send_move(['d', 'space', 'space'])
+    if state.state["payday"] == 0:
+        utils.print_red("ERROR: IN BATTLE TRYING TO SEND MOVE WITH 0 PP LEFT")
+        run()
+        return
+    send_move(['d', 'space'])
+    state.state['payday'] -= 1
+    utils.print_command(f"Paydays left: {state.state['payday']}")
 
 def send_move_three():
-    send_move(['s', 'space', 'space'])
+    send_move(['s', 'space'])
 
 def send_move_four():
-    send_move(['s', 'd', 'space', 'space'])
+    send_move(['s', 'd', 'space'])
 
 #TODO:
 def throw_pokeball():
@@ -20,9 +33,16 @@ def throw_pokeball():
 def send_move(moves):
     pyautogui.press('a')
     pyautogui.press('w')
+    pyautogui.press('space')
     for entry in moves:
         utils.print_command(f"SENDING KEY: {entry}")
         pyautogui.press(entry)
+
+def run():
+    pyautogui.press('shift')
+    pyautogui.press('s')
+    pyautogui.press('d')
+    pyautogui.press('space')
 
 #TODO:
 def swap_pokemon(path_to_swap):

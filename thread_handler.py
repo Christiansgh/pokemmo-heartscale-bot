@@ -27,8 +27,11 @@ def init_keybinds_listener():
             # reset the threads.
             # send heal command.
         if keyboard.is_pressed("F12"):
-            state.state["payday"] = 0
             print("F12 detected")
+            #main.activate_helpers("screenshots/dead.png", 0.8)
+            #state.events["continue"].clear()
+            #state.events["continue"].wait()
+            state.state["payday"] = 0
             time.sleep(1)
 
 def init_screen_reader_service(num_threads):

@@ -7,6 +7,7 @@ from utils import *
 keybinds = {
     "teleport": 'b',
     "interact": 'space',
+    "fish": 'f',
     "run": 'shift'
 }
 
@@ -17,13 +18,14 @@ directions = {
     "d": 'right'
 }
 
-# TODO:
-def remove_held_item():
-    print("TODO:")
-
 def teleport():
     print_command("Teleport")
     pyautogui.press(keybinds['teleport'])
+
+def fish():
+    face('s')
+    print_command("Fish")
+    pyautogui.press(keybinds['fish'])
 
 def interact():
     print_command("Interact")
