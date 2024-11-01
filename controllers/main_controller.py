@@ -77,10 +77,11 @@ def handle_walk_back():
 
 def handle_fish():
     movement.fish()
-    activate_helpers("screenshots/textbubble.png", 0.6, 15)
+    activate_helpers("screenshots/textbubble.png", 0.75, 15)
     state.events["continue"].clear()
     utils.print_info("Waiting for fish ready...")
     state.events["continue"].wait()
+    state.state["errors"] = 0
 
     movement.interact() # Reel in
     movement.fish()
@@ -147,6 +148,8 @@ def handle_battle():
         utils.print_info("Luvdisc found!")
         activate_helpers("screenshots/move_ready.png", 0.5, 11)
         utils.print_info("Waiting for move ready...")
+        state.events["continue"].clear()
+        state.events["continue"].wait()
 
         activate_helpers("screenshots/frozen.png", 0.9, 1)
         state.events["continue"].clear()
@@ -155,8 +158,6 @@ def handle_battle():
             battle.run()
             state.state["payday"] = 0
 
-        state.events["continue"].clear()
-        state.events["continue"].wait()
         battle.send_move_one()
 
     # Currently the move is sent, which can result in vitcory or another round.
