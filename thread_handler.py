@@ -32,6 +32,7 @@ def init_keybinds_listener():
             #state.events["continue"].clear()
             #state.events["continue"].wait()
             state.state["payday"] = 0
+            #main.remove_held_item()
             time.sleep(1)
 
 def init_screen_reader_service(num_threads):

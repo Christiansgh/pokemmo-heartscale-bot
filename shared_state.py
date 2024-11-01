@@ -6,6 +6,8 @@ state = {
     "await": False, # For main thread
     "quit": False,
     "max_timeouts": 0,
+    "max_errors": 5,
+    "errors": 0,
     "payday": 32,
     "thief": 40,
     "target": "none",

@@ -1,9 +1,15 @@
+from controllers import main_controller
 import mss
 import mss.tools
 import cv2
+import time
+import pyautogui
 
 import utils
 import shared_state as state
+import controllers.battle_controller as battle
+import controllers.main_controller as main
+import controllers.movement_controller as movement
 
 def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
 
@@ -55,6 +61,16 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
 def handle_activation():
     while not state.state["quit"]:
         state.events["activate"].wait()
+        if state.state["max_errors"] <= state.state["errors"]:
+            utils.print_red("ERROR: MAX ERRORS REACHED")
+            state.state["errors"] = 0
+            battle.run()
+            battle.run()
+            battle.run()
+            time.sleep(2)
+            pyautogui.click(2580, 400)
+            movement.teleport()
+            state.state["payday"] = 0
         state.state["found"] = False
         target = state.state["target"]
         certainty = state.state["certainty"]
@@ -79,6 +95,7 @@ def handle_activation():
 
         if num_timeouts >= max_timeouts:
             utils.print_red("ERROR: MAX TIMEOUTS REACHED")
+            state.state["errors"] += 1
         state.state["await"] = False
         state.events["continue"].set()
         state.events["activate"].clear()

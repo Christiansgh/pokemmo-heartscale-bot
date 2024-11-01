@@ -110,12 +110,21 @@ def fish_or_battle():
 
 def handle_battle():
     find_opponent()
+
     if state.state["opponent"] == "remoraid":
         utils.print_info("Remoraid found!")
         activate_helpers("screenshots/move_ready.png", 0.5, 11)
         utils.print_info("Waiting for move ready...")
         state.events["continue"].clear()
         state.events["continue"].wait()
+
+        activate_helpers("screenshots/frozen.png", 0.9, 1)
+        state.events["continue"].clear()
+        state.events["continue"].wait()
+        if state.state["found"]:
+            battle.run()
+            state.state["payday"] = 0
+
         battle.send_move_two()
 
     elif state.state["opponent"] == "shellder":
@@ -124,12 +133,28 @@ def handle_battle():
         utils.print_info("Waiting for move ready...")
         state.events["continue"].clear()
         state.events["continue"].wait()
+
+        activate_helpers("screenshots/frozen.png", 0.9, 1)
+        state.events["continue"].clear()
+        state.events["continue"].wait()
+        if state.state["found"]:
+            battle.run()
+            state.state["payday"] = 0
+        
         battle.send_move_two()
 
     elif state.state["opponent"] == "luvdisc":
         utils.print_info("Luvdisc found!")
         activate_helpers("screenshots/move_ready.png", 0.5, 11)
         utils.print_info("Waiting for move ready...")
+
+        activate_helpers("screenshots/frozen.png", 0.9, 1)
+        state.events["continue"].clear()
+        state.events["continue"].wait()
+        if state.state["found"]:
+            battle.run()
+            state.state["payday"] = 0
+
         state.events["continue"].clear()
         state.events["continue"].wait()
         battle.send_move_one()
@@ -138,7 +163,7 @@ def handle_battle():
     # Maybe we should add another param to "activate_helpers" that contains the maximum timeout.
 
     # TODO: IT IS POSSIBLE THAT CHANGING THE THEME FOR BETTER CONTRAST MIGHT BE A BETTER SOLUTION
-
+ 
     utils.print_info("Waiting for battle to finish...")
     activate_helpers("screenshots/dead.png", 0.97, 25)
     state.events["continue"].clear()
@@ -195,6 +220,13 @@ def remove_held_item():
         move_x = random_x - 250
         move_y = random_y + 91
         pyautogui.click(move_x, move_y)
+        activate_helpers("screenshots/red_bar.png", 0.9, 1) #TODO: Maybe tweak
+        state.events["continue"].clear()
+        state.events["continue"].wait()
+        if state.state["found"]:
+            state.state["payday"] = 0
+
+        state.state["errors"] = 0
     else:
         print("NOT FOUND")
         activate_helpers("screenshots/meowth.png", 0, 1)
@@ -254,6 +286,8 @@ def handle_stuck():
     # - Might be stuck outside - do handle_heal()
     # - Might be stuck inside the pokecenter.
     #       Do some wiggling to get outside, then heal.
+    # - Might be captchaed.
+    #   Maybe we can just hit log out and log back in again.
 
 #TODO:
 def handle_too_many_timeouts():

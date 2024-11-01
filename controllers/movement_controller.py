@@ -19,7 +19,9 @@ directions = {
 }
 
 def teleport():
+    face('w')
     print_command("Teleport")
+    face('w')
     pyautogui.press(keybinds['teleport'])
 
 def fish():
