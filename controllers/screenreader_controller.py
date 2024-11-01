@@ -54,7 +54,7 @@ def find_candidate(certainty, candidate_path, thread_num, monitor_num = 2):
         state.state["found"] = True
         return True, max_result, max_loc, candidate.shape[1], candidate.shape[0] #TODO: Set state here rather than return
 
-    utils.print_red(f"{candidate_path} not found - result: {max_result:.2f} required: {certainty}")
+    print(f"{candidate_path} not found - result: {max_result:.2f} required: {certainty}")
     state.state["found"] = False
     return False, max_result, None, None, None #TODO: Set state here rather than return
 
@@ -62,7 +62,7 @@ def handle_activation():
     while not state.state["quit"]:
         state.events["activate"].wait()
         if state.state["max_errors"] <= state.state["errors"]:
-            utils.print_red("ERROR: MAX ERRORS REACHED")
+            utils.print_red("CRITICAL: MAX ERRORS REACHED!!! TRYING TO GET UNSTUCK")
             state.state["errors"] = 0
             battle.run()
             battle.run()
@@ -93,8 +93,8 @@ def handle_activation():
             num_timeouts += 1
             continue
 
-        if num_timeouts >= max_timeouts:
-            utils.print_red("ERROR: MAX TIMEOUTS REACHED")
+        if num_timeouts >= max_timeouts and max_timeouts is not 1:
+            utils.print_yellow("WARNING: Timed out image search...")
             state.state["errors"] += 1
         state.state["await"] = False
         state.events["continue"].set()

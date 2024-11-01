@@ -62,8 +62,8 @@ def handle_heal():
     state.events["continue"].wait()
 
     utils.print_command("Healing")
-    movement.press_and_hold('space', 4)
-    movement.run_for(3, 's')
+    movement.press_and_hold('space', 4.5)
+    movement.run_for(2.5, 's')
     state.state["payday"] = 32
     state.state["thief"] = 40
     state.state["current_task"] = "idle"
@@ -123,10 +123,16 @@ def handle_battle():
         state.events["continue"].clear()
         state.events["continue"].wait()
         if state.state["found"]:
+            utils.print_delimiter()
+            utils.print_yellow("WARNING: Frozen icon found. Running then healing...")
             battle.run()
+            time.sleep(5)
             state.state["payday"] = 0
-
-        battle.send_move_two()
+            return
+        else:
+            utils.print_delimiter()
+            utils.print_green("Not frozen, sending move...")
+            battle.send_move_two()
 
     elif state.state["opponent"] == "shellder":
         utils.print_info("Shellder found!")
@@ -139,10 +145,16 @@ def handle_battle():
         state.events["continue"].clear()
         state.events["continue"].wait()
         if state.state["found"]:
+            utils.print_delimiter()
+            utils.print_yellow("WARNING: Frozen icon found. Running then healing...")
             battle.run()
+            time.sleep(5)
             state.state["payday"] = 0
-        
-        battle.send_move_two()
+            return
+        else:
+            utils.print_delimiter()
+            utils.print_green("Not frozen, sending move...")
+            battle.send_move_two()
 
     elif state.state["opponent"] == "luvdisc":
         utils.print_info("Luvdisc found!")
@@ -155,18 +167,24 @@ def handle_battle():
         state.events["continue"].clear()
         state.events["continue"].wait()
         if state.state["found"]:
+            utils.print_delimiter()
+            utils.print_yellow("WARNING: Frozen icon found. Running then healing...")
             battle.run()
+            time.sleep(5)
             state.state["payday"] = 0
-
-        battle.send_move_one()
-
+            return
+        else:
+            utils.print_delimiter()
+            utils.print_green("Not frozen, sending move...")
+            battle.send_move_one()
+        
     # Currently the move is sent, which can result in vitcory or another round.
     # Maybe we should add another param to "activate_helpers" that contains the maximum timeout.
 
     # TODO: IT IS POSSIBLE THAT CHANGING THE THEME FOR BETTER CONTRAST MIGHT BE A BETTER SOLUTION
  
     utils.print_info("Waiting for battle to finish...")
-    activate_helpers("screenshots/dead.png", 0.97, 25)
+    activate_helpers("screenshots/dead.png", 0.999, 25)
     state.events["continue"].clear()
     state.events["continue"].wait()
     found = state.state["found"]

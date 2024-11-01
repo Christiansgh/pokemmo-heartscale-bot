@@ -24,6 +24,9 @@ def print_red(message):
 def print_green(message):
     print(f"{GREEN}{message}{RESET}")
 
+def print_yellow(message):
+    print(f"{YELLOW}{message}{RESET}")
+
 #TODO:
 def print_keybinds():
     print("TODO")
