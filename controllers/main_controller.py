@@ -216,7 +216,7 @@ def find_opponent():
     luvdisc = state.state["result"]
     if state.state["opponent"] == "shellder" and luvdisc > shellder:
         state.state["opponent"] = "luvdisc"
-    elif luvdisc > remoraid:
+    elif luvdisc > remoraid and luvdisc > shellder:
         state.state["opponent"] = "luvdisc"
 
 def remove_held_item():
